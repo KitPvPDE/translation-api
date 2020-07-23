@@ -1,0 +1,8 @@
+/bin
+*.iml
+.settings/
+.idea/
+target/
+atlassian-ide-plugin.xml
+*.jar
+dependency-reduced-pom.xml
