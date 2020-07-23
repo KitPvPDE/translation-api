@@ -1,8 +1,7 @@
 package net.kitpvp.network.translation;
 
 import lombok.Getter;
-import net.kitpvp.mongodbapi.MongoConnector;
-import org.bson.Document;
+import lombok.Setter;
 
 import java.text.FieldPosition;
 import java.text.MessageFormat;
@@ -12,13 +11,14 @@ import java.util.stream.Stream;
 
 public class LocaleManager {
 
-    @Getter
-    private static LocaleManager instance;
     public static final Set<Locale> ACCEPTED = Stream.of(Locale.US, Locale.GERMANY).collect(Collectors.toSet());
     public static final Locale DEFAULT = Locale.US;
 
-    public static LocaleManager createFromDatabase() {
-        return (instance = new LocaleManager());
+    @Setter
+    private static LocaleManager instance = EchoLocaleManager.INSTANCE;
+
+    public static LocaleManager getInstance() {
+        return instance == null ? EchoLocaleManager.INSTANCE : instance;
     }
 
     public static String staticTranslate(String languageKey, Object... args) {
@@ -29,34 +29,20 @@ public class LocaleManager {
         return getInstance().translate(locale, languageKey, args);
     }
 
-    private Map<Locale, Map<String, MessageFormat>> languages = new HashMap<>();
+    protected final Map<Locale, Map<String, MessageFormat>> languages = new HashMap<>();
 
-    private LocaleManager() {
-        for(Locale locale : ACCEPTED){
-            Map<String, MessageFormat> languageFormats = new HashMap<>();
-            for(Document document : MongoConnector.getInstance().getMongoDatabase().getCollection("language_keys_" + locale.toString()).find()){
-                try{
-                    languageFormats.put(document.getString("_id"), new MessageFormat(document.getString("value").replace("%D", "  ")));
-                }catch(Throwable e){
-                    System.err.println("Could not parse language format: " + document.getString("value"));
-                }
-            }
-
-            this.languages.put(locale, languageFormats);
-            System.out.println("Loaded locale " + locale + " - " + languageFormats.size() + " language keys");
-        }
-    }
+    protected LocaleManager() { }
 
     public String translate(String translationKey, Object... args) {
         return this.translate(DEFAULT, translationKey, args);
     }
 
     public String translate(Locale locale, String translationKey, Object... args) {
-        try {
+        try{
             MessageFormat translationFormat = this.findTranslation(locale, translationKey);
 
             return translationFormat.format(args, new StringBuffer(), new FieldPosition(0)).toString();
-        } catch(Throwable throwable) {
+        }catch(Throwable throwable){
             return translationKey;
         }
     }

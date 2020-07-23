@@ -6,7 +6,7 @@
 
     <groupId>net.kitpvp.network</groupId>
     <artifactId>translation-api</artifactId>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
 
     <inceptionYear>2020</inceptionYear>
     <description>A simple translation API</description>
@@ -30,15 +30,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>net.kitpvp.mongodb</groupId>
-            <artifactId>mongodb-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.10</version>
+            <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
