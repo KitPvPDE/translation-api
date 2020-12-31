@@ -6,7 +6,7 @@
 
     <groupId>net.kitpvp.network</groupId>
     <artifactId>translation-api</artifactId>
-    <version>1.4-SNAPSHOT</version>
+    <version>1.5-SNAPSHOT</version>
 
     <inceptionYear>2020</inceptionYear>
     <description>A simple translation API</description>
