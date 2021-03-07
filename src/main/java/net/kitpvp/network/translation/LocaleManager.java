@@ -2,6 +2,7 @@ package net.kitpvp.network.translation;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.kitpvp.network.translation.substitute.Substitution;
 
 import java.text.FieldPosition;
 import java.text.MessageFormat;
@@ -41,7 +42,7 @@ public class LocaleManager {
         try{
             MessageFormat translationFormat = this.findTranslation(locale, translationKey);
 
-            return translationFormat.format(args, new StringBuffer(), new FieldPosition(0)).toString();
+            return translationFormat.format(this.applySubstitutions(locale, args), new StringBuffer(), new FieldPosition(0)).toString();
         }catch(Throwable throwable){
             return translationKey;
         }
@@ -61,6 +62,16 @@ public class LocaleManager {
         }
 
         return this.languages.get(locale).computeIfAbsent(translationKey, MessageFormat::new);
+    }
+
+    private Object[] applySubstitutions(Locale locale, Object[] args) {
+        for(int i = 0; i < args.length; i++) {
+            Object obj = args[i];
+            if(obj instanceof Substitution) {
+                args[i] = ((Substitution<?>) obj).replace(locale, this);
+            }
+        }
+        return args;
     }
 
     public List<Locale> getLoadedLocales() {
