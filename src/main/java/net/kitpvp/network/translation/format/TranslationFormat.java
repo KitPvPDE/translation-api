@@ -144,10 +144,11 @@ public class TranslationFormat {
 
         for (int i = 0; i < this.translation.length(); ++i) {
             char ch = this.translation.charAt(i);
+            char lookahead = this.translation.length() > i + 1 ? this.translation.charAt(i + 1) : 0;
             if (part == SEG_RAW) {
                 if (ch == '\'') {
                     inQuote = !inQuote;
-                } else if (ch == '{' && !inQuote) {
+                } else if (ch == '{' && !inQuote && lookahead != '%') {
                     part = SEG_INDEX;
                     if (segments[SEG_INDEX] == null) {
                         segments[SEG_INDEX] = new StringBuilder();
