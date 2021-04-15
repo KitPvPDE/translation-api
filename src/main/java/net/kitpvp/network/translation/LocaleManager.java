@@ -1,5 +1,6 @@
 package net.kitpvp.network.translation;
 
+import lombok.Getter;
 import lombok.Setter;
 import net.kitpvp.network.translation.format.TranslationFormat;
 import net.kitpvp.network.translation.substitute.Substitution;
@@ -13,7 +14,7 @@ public abstract class LocaleManager {
 
     public static final Set<Locale> ACCEPTED = Stream.of(Locale.US, Locale.GERMANY).collect(Collectors.toSet());
     public static final Locale DEFAULT = Locale.GERMANY;
-    @Setter
+    @Getter @Setter
     private static LocaleManager instance = EchoLocaleManager.INSTANCE;
 
     protected final Map<Locale, Map<String, TranslationFormat>> languages = new HashMap<>();
