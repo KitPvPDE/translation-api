@@ -8,10 +8,8 @@ import net.kitpvp.network.translation.format.TranslationFormat;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class PropertyLocaleManager extends LocaleManager {
@@ -54,20 +52,22 @@ public class PropertyLocaleManager extends LocaleManager {
     private void initLocale(String language, String country, String version, InputStream inputStream) throws IOException {
         Locale locale = country == null ? new Locale(language) : new Locale(language, country);
         Properties properties = new Properties();
-        properties.load(inputStream);
+        try (InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
+            properties.load(streamReader);
 
-        this.languages.put(locale, new HashMap<>());
-        for(String entry : properties.stringPropertyNames()) {
-            String value = properties.getProperty(entry);
+            this.languages.put(locale, new HashMap<>());
+            for(String entry : properties.stringPropertyNames()) {
+                String value = properties.getProperty(entry);
 
-            if(value == null)
-                continue;
+                if(value == null)
+                    continue;
 
-            this.languages.get(locale).put(entry, new TranslationFormat(value, locale));
+                this.languages.get(locale).put(entry, new TranslationFormat(value, locale));
+            }
+
+            this.loaded.add(locale);
+            System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
         }
-
-        this.loaded.add(locale);
-        System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
     }
 
     private void init(Class<?> source, String classpath) throws IOException {
