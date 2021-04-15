@@ -29,13 +29,21 @@ public class PropertyLocaleManager extends LocaleManager {
     }
 
     public PropertyLocaleManager(LocaleManager parent, String classpath) throws IOException {
-        super(parent);
-        this.init(classpath);
+        this(parent, PropertyLocaleManager.class, classpath);
     }
 
     public PropertyLocaleManager(String classpath) throws IOException{
+        this(PropertyLocaleManager.class, classpath);
+    }
+
+    public PropertyLocaleManager(LocaleManager parent, Class<?> source, String classpath) throws IOException {
+        super(parent);
+        this.init(source, classpath);
+    }
+
+    public PropertyLocaleManager(Class<?> source, String classpath) throws IOException{
         super();
-        this.init(classpath);
+        this.init(source, classpath);
     }
 
     @Override
@@ -62,8 +70,8 @@ public class PropertyLocaleManager extends LocaleManager {
         System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
     }
 
-    private void init(String classpath) throws IOException {
-        try (InputStream languageStream = this.getClass().getResourceAsStream(classpath + "/language.json")) {
+    private void init(Class<?> source, String classpath) throws IOException {
+        try (InputStream languageStream = source.getResourceAsStream(classpath + "/language.json")) {
             if(languageStream == null)
                 throw new FileNotFoundException(classpath + "/language.json");
             JsonArray array = JsonReader.readToJson(languageStream).getAsJsonArray();
@@ -74,7 +82,7 @@ public class PropertyLocaleManager extends LocaleManager {
                 String file = JsonConfig.readString(element, null, "file");
                 String version = JsonConfig.readString(element, null, "version");
 
-                try (InputStream inputStream = this.getClass().getResourceAsStream(classpath + "/" + file)){
+                try (InputStream inputStream = source.getResourceAsStream(classpath + "/" + file)){
                     this.initLocale(language, country, version, inputStream);
                 }
             }

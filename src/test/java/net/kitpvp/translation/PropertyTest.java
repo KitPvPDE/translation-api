@@ -12,7 +12,7 @@ public class PropertyTest {
 
     @Test
     public void testPropertyLocaleManager() throws IOException {
-        PropertyLocaleManager localeManager = new PropertyLocaleManager("/locales");
+        PropertyLocaleManager localeManager = new PropertyLocaleManager(PropertyTest.class, "/locales");
         System.out.println(localeManager.getLoadedLocales());
 
         Assert.assertEquals("Das ist ein Test! 33", localeManager.translate(LocaleManager.DEFAULT, "translation.test", "33"));
