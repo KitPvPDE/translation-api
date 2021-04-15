@@ -6,7 +6,6 @@ import net.kitpvp.json.JsonConfig;
 import net.kitpvp.json.JsonReader;
 import net.kitpvp.network.translation.format.TranslationFormat;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +13,7 @@ import java.util.*;
 
 public class PropertyLocaleManager extends LocaleManager {
 
-    private final List<Locale> loaded = new ArrayList<>();
+    private final List<Locale> loaded = new ArrayList<>()
 
     public PropertyLocaleManager(File folder) throws IOException {
         super();
