@@ -1,0 +1,14 @@
+[
+  {
+    "language": "de",
+    "country": "DE",
+    "file": "test_de.properties",
+    "version": "1.0.0"
+  },
+  {
+    "language": "en",
+    "country": "US",
+    "file": "test_en.properties",
+    "version": "1.0.0"
+  }
+]
