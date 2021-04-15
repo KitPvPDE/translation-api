@@ -43,6 +43,11 @@ public class PropertyLocaleManager extends LocaleManager {
         this.init(source, classpath);
     }
 
+    public void reloadLocaleManager(File folder) throws IOException {
+        this.languages.clear();
+        this.init(folder);
+    }
+
     @Override
     public List<Locale> getLoadedLocales() {
         return this.loaded;
