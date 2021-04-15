@@ -13,7 +13,7 @@ import java.util.*;
 
 public class PropertyLocaleManager extends LocaleManager {
 
-    private final List<Locale> loaded = new ArrayList<>()
+    private final List<Locale> loaded = new ArrayList<>();
 
     public PropertyLocaleManager(File folder) throws IOException {
         super();
