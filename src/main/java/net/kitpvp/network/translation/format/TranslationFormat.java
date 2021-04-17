@@ -69,10 +69,18 @@ public class TranslationFormat {
     private final String translation;
     private final Locale locale;
 
-    public TranslationFormat( String translation, Locale locale) {
+    public TranslationFormat(String translation, Locale locale) {
         this.translation = translation;
         this.locale = locale;
         this.applyPattern();
+    }
+
+    @Override
+    public String toString() {
+        return "TranslationFormat{" +
+                "translation='" + translation + '\'' +
+                ", locale=" + locale +
+                '}';
     }
 
     public final StringBuffer format(Object[] args, StringBuffer buffer) {

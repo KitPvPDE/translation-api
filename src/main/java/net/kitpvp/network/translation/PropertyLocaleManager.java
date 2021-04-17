@@ -71,6 +71,7 @@ public class PropertyLocaleManager extends LocaleManager {
 
             this.loaded.add(locale);
             System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
+            System.out.println("[DEBUG] Translations: " + this.languages);
         }
     }
 
