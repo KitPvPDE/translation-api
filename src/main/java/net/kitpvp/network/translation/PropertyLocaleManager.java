@@ -71,7 +71,6 @@ public class PropertyLocaleManager extends LocaleManager {
 
             this.loaded.add(locale);
             System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
-            System.out.println("[DEBUG] Translations: " + this.languages);
         }
     }
 
@@ -88,6 +87,7 @@ public class PropertyLocaleManager extends LocaleManager {
                 String version = JsonConfig.readString(element, null, "version");
 
                 try (InputStream inputStream = source.getResourceAsStream(classpath + "/" + file)){
+                    System.out.println("Loading locale from classpath " + classpath + "/" + file);
                     this.initLocale(language, country, version, inputStream);
                 }
             }
@@ -105,6 +105,7 @@ public class PropertyLocaleManager extends LocaleManager {
                 String version = JsonConfig.readString(element, null, "version");
 
                 try (InputStream inputStream = FileUtils.openInputStream(file)){
+                    System.out.println("Loading locale from file " + file.getAbsolutePath());
                     this.initLocale(language, country, version, inputStream);
                 }
             }
