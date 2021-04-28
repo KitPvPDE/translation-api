@@ -4,6 +4,8 @@ import net.kitpvp.network.translation.LocaleManager;
 import net.kitpvp.network.translation.format.TranslationFormat;
 import org.junit.Test;
 
+import java.util.Arrays;
+
 import static org.junit.Assert.assertEquals;
 
 public class TestTranslation {
@@ -54,5 +56,12 @@ public class TestTranslation {
     public void testColorCodeInFormat() {
         TranslationFormat format = new TranslationFormat("This is a {%m}message{%n} with one argument and color ({%m}{0})", LocaleManager.DEFAULT);
         assertEquals("This is a {%m}message{%n} with one argument and color ({%m}0)", format.format(new Object[]{0}, new StringBuffer()).toString());
+    }
+
+    @Test
+    public void testRangeFormat(){
+        TranslationFormat format = new TranslationFormat("This is a message with a range format used ({0,range,{0;, ;n-1} and {n}})", LocaleManager.DEFAULT);
+        assertEquals("This is a message with a range format used (a, b, c, d, e and f)",
+                format.format(new Object[]{Arrays.asList("a", "b", "c", "d", "e", "f")}, new StringBuffer()).toString());
     }
 }

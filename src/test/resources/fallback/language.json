@@ -1,0 +1,14 @@
+[
+  {
+    "language": "de",
+    "country": "DE",
+    "file": "fallback_de.properties",
+    "version": "1.0.0"
+  },
+  {
+    "language": "en",
+    "country": "US",
+    "file": "fallback_en.properties",
+    "version": "1.0.0"
+  }
+]

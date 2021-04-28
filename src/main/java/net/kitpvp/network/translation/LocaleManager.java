@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 
 public abstract class LocaleManager {
 
-    public static final Set<Locale> ACCEPTED = Stream.of(Locale.US, Locale.GERMANY).collect(Collectors.toSet());
     public static final Locale DEFAULT = Locale.GERMANY;
     @Getter @Setter
     private static LocaleManager instance = EchoLocaleManager.INSTANCE;
@@ -51,12 +50,9 @@ public abstract class LocaleManager {
         }
     }
 
-    protected @Nullable TranslationFormat findTranslation(Locale locale, String translationKey) {
-        if (!ACCEPTED.contains(locale))
-            return this.findTranslation(DEFAULT, translationKey);
-
+    protected final @Nullable TranslationFormat findTranslation(Locale locale, String translationKey) {
         if (!this.languages.containsKey(locale)) {
-            this.languages.put(locale, new HashMap<>());
+            return null;
         }
 
         if (!this.languages.get(locale).containsKey(translationKey)) {
@@ -65,7 +61,6 @@ public abstract class LocaleManager {
         }
 
         return this.languages.get(locale).get(translationKey);
-        //.computeIfAbsent(translationKey, (languageKey) -> new TranslationFormat(languageKey, locale));
     }
 
     protected Object[] applySubstitutions(Locale locale, Object[] args) {
