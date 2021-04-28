@@ -52,7 +52,7 @@ public abstract class LocaleManager {
 
     protected final @Nullable TranslationFormat findTranslation(Locale locale, String translationKey) {
         if (!this.languages.containsKey(locale)) {
-            return null;
+            return findTranslation(DEFAULT, translationKey);
         }
 
         if (!this.languages.get(locale).containsKey(translationKey)) {
