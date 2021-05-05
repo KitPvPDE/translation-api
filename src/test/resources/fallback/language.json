@@ -10,5 +10,11 @@
     "country": "US",
     "file": "fallback_en.properties",
     "version": "1.0.0"
+  },
+  {
+    "language": "en",
+    "country": "PT",
+    "file": "fallback_pt.properties",
+    "version": "1.0.0"
   }
 ]

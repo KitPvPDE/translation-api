@@ -154,7 +154,7 @@ public class TranslationFormat {
             char ch = this.translation.charAt(i);
             char lookahead = this.translation.length() > i + 1 ? this.translation.charAt(i + 1) : 0;
             if (part == SEG_RAW) {
-                if (ch == '\'') {
+                if (ch == '\'' && lookahead == '\'') {
                     inQuote = !inQuote;
                 } else if (ch == '{' && !inQuote && lookahead != '%') {
                     part = SEG_INDEX;
@@ -166,7 +166,7 @@ public class TranslationFormat {
                 }
             } else {
                 if (inQuote) {
-                    if (ch == '\'') {
+                    if (ch == '\'' && lookahead == '\'') {
                         inQuote = false;
                     } else {
                         segments[part].append(ch);
@@ -207,7 +207,7 @@ public class TranslationFormat {
                             break;
                         case '\'':
                         default:
-                            if (ch == '\'') {
+                            if (ch == '\'' && lookahead == '\'') {
                                 inQuote = true;
                             } else {
                                 segments[part].append(ch);

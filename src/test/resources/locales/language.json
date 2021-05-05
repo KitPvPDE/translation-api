@@ -10,5 +10,11 @@
     "country": "US",
     "file": "test_en.properties",
     "version": "1.0.0"
+  },
+  {
+    "language": "en",
+    "country": "PT",
+    "file": "test_pt.properties",
+    "version": "1.0.0"
   }
 ]

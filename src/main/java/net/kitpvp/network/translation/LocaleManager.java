@@ -2,18 +2,19 @@ package net.kitpvp.network.translation;
 
 import lombok.Getter;
 import lombok.Setter;
+import net.kitpvp.network.translation.exception.InvalidTranslationException;
+import net.kitpvp.network.translation.exception.MissingTranslationException;
 import net.kitpvp.network.translation.format.TranslationFormat;
 import net.kitpvp.network.translation.substitute.Substitution;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public abstract class LocaleManager {
 
     public static final Locale DEFAULT = Locale.GERMANY;
-    @Getter @Setter
+    @Getter
+    @Setter
     private static LocaleManager instance = EchoLocaleManager.INSTANCE;
 
     protected final Map<Locale, Map<String, TranslationFormat>> languages = new HashMap<>();
@@ -32,21 +33,25 @@ public abstract class LocaleManager {
     }
 
     @Deprecated
-    public String translate(String translationKey, Object... args) {
+    public String translate(String translationKey, Object... args) throws
+            InvalidTranslationException, MissingTranslationException {
         return this.translate(DEFAULT, translationKey, args);
     }
 
-    public String translate(Locale locale, String translationKey, Object... args) {
+    public String translate(Locale locale, String translationKey, Object... args) throws
+            InvalidTranslationException, MissingTranslationException {
         try {
             TranslationFormat translationFormat = this.findTranslation(locale, translationKey);
             if (translationFormat == null) {
-                if(parent == null)
-                    return translationKey;
+                if (parent == null)
+                    throw new MissingTranslationException(translationKey);
                 return parent.translate(locale, translationKey, args);
             }
             return translationFormat.format(this.applySubstitutions(locale, args), new StringBuffer()).toString();
-        } catch (Throwable throwable) {
-            return translationKey;
+        } catch (MissingTranslationException | InvalidTranslationException cause){
+            throw cause;
+        } catch (Throwable cause) {
+            throw new InvalidTranslationException(translationKey, cause);
         }
     }
 

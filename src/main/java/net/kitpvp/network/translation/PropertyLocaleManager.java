@@ -4,6 +4,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import net.kitpvp.json.JsonConfig;
 import net.kitpvp.json.JsonReader;
+import net.kitpvp.network.translation.exception.InvalidTranslationException;
+import net.kitpvp.network.translation.exception.MissingTranslationException;
 import net.kitpvp.network.translation.format.TranslationFormat;
 import org.apache.commons.io.FileUtils;
 
@@ -53,6 +55,12 @@ public class PropertyLocaleManager extends LocaleManager {
         return this.loaded;
     }
 
+    @Override
+    public String translate(Locale locale, String translationKey, Object... args)
+            throws InvalidTranslationException, MissingTranslationException {
+        return super.translate(locale, translationKey, args);
+    }
+
     private void initLocale(String language, String country, String version, InputStream inputStream) throws IOException {
         Locale locale = country == null ? new Locale(language) : new Locale(language, country);
         Properties properties = new Properties();
@@ -70,7 +78,6 @@ public class PropertyLocaleManager extends LocaleManager {
             }
 
             this.loaded.add(locale);
-            System.out.println("Loaded Locale " + locale + " version " + version + " (" + this.languages.get(locale).size() + " keys)");
         }
     }
 
@@ -87,11 +94,11 @@ public class PropertyLocaleManager extends LocaleManager {
                 String version = JsonConfig.readString(element, null, "version");
 
                 try (InputStream inputStream = source.getResourceAsStream(classpath + "/" + file)){
-                    System.out.println("Loading locale from classpath " + classpath + "/" + file);
                     this.initLocale(language, country, version, inputStream);
                 }
             }
         }
+        this.postInit(classpath);
     }
 
     private void init(File folder) throws IOException {
@@ -105,11 +112,20 @@ public class PropertyLocaleManager extends LocaleManager {
                 String version = JsonConfig.readString(element, null, "version");
 
                 try (InputStream inputStream = FileUtils.openInputStream(file)){
-                    System.out.println("Loading locale from file " + file.getAbsolutePath());
                     this.initLocale(language, country, version, inputStream);
                 }
             }
         }
+        this.postInit(folder.getAbsolutePath());
+    }
 
+    private void postInit(String path) {
+        StringBuilder builder = new StringBuilder();
+        for(Locale locale : this.getLoadedLocales()) {
+            if(builder.length() > 0)
+                builder.append(" | ");
+            builder.append(locale).append(" (").append(this.languages.get(locale).size()).append(" keys)");
+        }
+        System.out.println("Loaded locales from " + path + ": " + builder);
     }
 }
