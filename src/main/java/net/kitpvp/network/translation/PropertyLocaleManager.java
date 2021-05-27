@@ -74,7 +74,11 @@ public class PropertyLocaleManager extends LocaleManager {
                 if(value == null)
                     continue;
 
-                this.languages.get(locale).put(entry, new TranslationFormat(value, locale));
+                try {
+                    this.languages.get(locale).put(entry, new TranslationFormat(value, locale));
+                } catch (IllegalArgumentException cause) {
+                    throw new IllegalArgumentException("Could not parse translation key " + entry + ": '" + value + "'", cause);
+                }
             }
 
             this.loaded.add(locale);
