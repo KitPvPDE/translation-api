@@ -81,8 +81,9 @@ public class PropertyLocaleManager extends LocaleManager {
         Properties properties = new Properties();
         try (InputStreamReader streamReader = new InputStreamReader(inputStream, StandardCharsets.UTF_8)) {
             properties.load(streamReader);
-
-            this.languages.put(locale, new HashMap<>());
+            if(!this.languages.containsKey(locale)) {
+                this.languages.put(locale, new HashMap<>());
+            }
             for(String entry : properties.stringPropertyNames()) {
                 String value = properties.getProperty(entry);
 
