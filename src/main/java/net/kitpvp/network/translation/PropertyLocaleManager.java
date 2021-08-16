@@ -27,6 +27,16 @@ public class PropertyLocaleManager extends LocaleManager {
         this.init(folder);
     }
 
+    public PropertyLocaleManager(File[] folders) throws IOException {
+        super();
+        this.init(folders);
+    }
+
+    public PropertyLocaleManager(LocaleManager parent, File[] folders) throws IOException {
+        super(parent);
+        this.init(folders);
+    }
+
     public PropertyLocaleManager(LocaleManager parent, String classpath) throws IOException {
         this(parent, PropertyLocaleManager.class, classpath);
     }
@@ -48,6 +58,11 @@ public class PropertyLocaleManager extends LocaleManager {
     public void reloadLocaleManager(File folder) throws IOException {
         this.languages.clear();
         this.init(folder);
+    }
+
+    public void reloadLocaleManager(File[] folders) throws IOException {
+        this.languages.clear();
+        this.init(folders);
     }
 
     @Override
@@ -103,6 +118,12 @@ public class PropertyLocaleManager extends LocaleManager {
             }
         }
         this.postInit(classpath);
+    }
+
+    protected void init(File[] folders) throws IOException {
+        for (File folder : folders) {
+            this.init(folder);
+        }
     }
 
     private void init(File folder) throws IOException {
